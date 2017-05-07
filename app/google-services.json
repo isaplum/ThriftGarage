@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "767702932734",
+    "firebase_url": "https://thriftgarage-9e13f.firebaseio.com",
+    "project_id": "thriftgarage-9e13f",
+    "storage_bucket": "thriftgarage-9e13f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767702932734:android:a29b7aa71fd03e13",
+        "android_client_info": {
+          "package_name": "com.example.krixniemann.thriftgarage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767702932734-g7hkss894hbim856pv6ce4cqja7q05nh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.krixniemann.thriftgarage",
+            "certificate_hash": "443f2f761af0fd69db1262f45448bad05f9f39a2"
+          }
+        },
+        {
+          "client_id": "767702932734-m8u2mce7n2k1r0e771i4kkjiuc6nkl3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4aEHLQlbuoPmP0eBGROtbrQvZgev-zPU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767702932734-m8u2mce7n2k1r0e771i4kkjiuc6nkl3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
