@@ -175,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //This is what is probably needing to be fixed. fixme pls
 
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+       DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             public static final String TAG = "";
 
@@ -196,6 +196,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 throw databaseError.toException();
             }
         });
+
     }
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public boolean checkLocationPermission(){

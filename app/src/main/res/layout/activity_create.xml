@@ -44,7 +44,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/buttonSubmit"
         android:layout_marginTop="27dp"
-        android:id="@+id/tvDisplay" />
+        android:id="@+id/geo_search_result_text"
+        android:padding="10dp"/>
 
     <fragment
         android:id="@+id/map"
