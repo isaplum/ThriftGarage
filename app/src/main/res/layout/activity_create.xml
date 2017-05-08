@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:id="@+id/activity_create"
     tools:context="com.example.krixniemann.thriftgarage.CreateActivity">
-
-    <com.google.android.gms.maps.MapView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="204dp"
-        android:id="@+id/mapView"
-        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="Please enter a location you would like to add"
@@ -22,7 +14,7 @@
         android:layout_marginStart="19dp"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/mapView"
+
         android:layout_marginTop="32dp" />
 
     <EditText
@@ -44,4 +36,21 @@
         android:layout_alignStart="@+id/etAddress"
         android:layout_marginTop="36dp"
         android:id="@+id/buttonSubmit" />
-</RelativeLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/buttonSubmit"
+        android:layout_marginTop="27dp"
+        android:id="@+id/tvDisplay" />
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:name="com.google.android.gms.maps.MapFragment"
+        tools:layout="@layout/activity_maps" />
+</LinearLayout>

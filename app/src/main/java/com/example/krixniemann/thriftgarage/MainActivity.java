@@ -1,8 +1,10 @@
 package com.example.krixniemann.thriftgarage;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,11 +25,29 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() { //initialized mAuthListener
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                //track the user when they sign in or out using the firebaseAuth
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // User is signed out
+                    Log.d("CSS3334", "onAuthStateChanged - User NOT is signed in");
+                    Intent signInIntent = new Intent(getBaseContext(), AuthActivity.class);
+                    startActivity(signInIntent);
+                }
+            }
+        };
+
 
         createBtn = (Button) findViewById(R.id.createButton);
         browseBtn = (Button) findViewById(R.id.browseButton);
@@ -58,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     /**
@@ -85,15 +106,18 @@ public class MainActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+            // ATTENTION: This was auto-generated to implement the App Indexing API.
+            // See https://g.co/AppIndexing/AndroidStudio for more information.
+            AppIndex.AppIndexApi.end(client, getIndexApiAction());
+            client.disconnect();
+        }
     }
 }
