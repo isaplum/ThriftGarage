@@ -44,7 +44,7 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.geo_search_result_item, parent, false);
+            convertView = inflater.inflate(R.layout.geo_search_result, parent, false);
         }
 
         ((TextView) convertView.findViewById(R.id.geo_search_result_text)).setText(getItem(position).getAddress());
@@ -59,7 +59,7 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List locations = findLocations(mContext, constraint.toString());
+                    List<GeoSearchResult> locations = findLocations(mContext, constraint.toString());
 
                     // Assign the data to the FilterResults
                     filterResults.values = locations;
@@ -70,8 +70,8 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
-                if (results != null &amp;&amp; results.count &gt; 0) {
-                    resultList = (List) results.values;
+                if (results != null && results.count > 0) {
+                    resultList = (List<GeoSearchResult>) results.values;
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
@@ -93,7 +93,7 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
             addresses = geocoder.getFromLocationName(query_text, 15);
 
             for(int i=0;i<addresses.size();i++){
-                Address address = (Address) addresses.get(i);
+                Address address = addresses.get(i);
                 if(address.getMaxAddressLineIndex() != -1)
                 {
                     geo_search_results.add(new GeoSearchResult(address));

@@ -49,15 +49,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
    private Location mLastLocation;
     Marker mCurrLocationMarker;
     private GoogleMap mMap;
+    List<Marker> markersList;
+   // public static LatLng addresso;
+    private Double latitude;
+    private Double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -66,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
 
 
     /**
@@ -151,7 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
@@ -174,17 +177,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //This is what is probably needing to be fixed. fixme pls
 
-
-       DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+      DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            public static final String TAG = "";
+
+            public static final String TAG = "Won't work";
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    LatLng addresso = dataSnapshot.child("place").getValue(LatLng.class);
 
-                    mMap.addMarker(new MarkerOptions().position(addresso).title(""));
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot data : dataSnapshot.child("place").getChildren()) {
+                        LatLng address = data.getValue(LatLng.class);
+
+
+                        mMap.addMarker(new MarkerOptions().position(address).title(""));
+                    }
+
+
+
+
 
                 } else {
                     Log.e(TAG, "onDataChange: No data");
@@ -196,6 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 throw databaseError.toException();
             }
         });
+
 
     }
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -261,29 +273,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //You can add here other case statements according to your requirement.
         }
     }
-    public LatLng getLocationFromAddress(String strAddress)
-    {
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        LatLng p1 = null;
 
-        try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
-                return null;
-            }
-            android.location.Address location=address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new LatLng(location.getLatitude(), location.getLongitude());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return p1;
-    }
 
 }

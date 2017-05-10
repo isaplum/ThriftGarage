@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
+import static android.R.attr.keycode;
 import static android.R.attr.text;
 
 /**
@@ -41,7 +42,7 @@ public class DelayAutoCompleteTextView extends AutoCompleteTextView {
     }
 
     @Override
-    protected void performFiltering(CharSequence tex, int keyCodet) {
+    protected void performFiltering(CharSequence text, int keyCodet) {
         if (mLoadingIndicator != null) {
             mLoadingIndicator.setVisibility(View.VISIBLE);
         }

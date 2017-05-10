@@ -10,11 +10,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,18 +58,20 @@ public class CreateActivity extends FragmentActivity implements
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    TextView mTextView;
     EditText etAddressy;
-    private Marker entry;
     private GoogleMap mMap;
     Button submit;
-    private String addressy = "street";
+    private Integer THRESHOLD = 2;
+    private DelayAutoCompleteTextView geo_autocomplete;
+    private ImageView geo_autocomplete_clear;
+    private LatLng place;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-        mTextView = (TextView) findViewById(R.id.tvDisplay);
+       // mTextView = (TextView) findViewById(R.id.tvDisplay);
         etAddressy = (EditText) findViewById(R.id.etAddress);
         // PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
        MapFragment mapFragment =
@@ -80,24 +86,84 @@ public class CreateActivity extends FragmentActivity implements
                 .addOnConnectionFailedListener( this )
                 .build();
 
+//Address autocomplete code
 
+      geo_autocomplete_clear = (ImageView) findViewById(R.id.geo_autocomplete_clear);
 
-        submit = (Button) findViewById(R.id.buttonSubmit);
-        submit.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view) {
+        geo_autocomplete = (DelayAutoCompleteTextView) findViewById(R.id.geo_autocomplete);
+        geo_autocomplete.setThreshold(THRESHOLD);
+        geo_autocomplete.setAdapter(new GeoAutoCompleteAdapter(this)); // 'this' is Activity instance
+
+        geo_autocomplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 if (mMap !=null)
                 {
                     mMap.clear();
                 }
 
-        addressy = etAddressy.getText().toString();
-                LatLng addresso = getLocationFromAddress(addressy);
-               mMap.addMarker(new MarkerOptions().position(addresso).title("Ugh"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(addresso, 12.0f));
+                GeoSearchResult result = (GeoSearchResult) adapterView.getItemAtPosition(position);
+                geo_autocomplete.setText(result.getAddress());
+                String addresso = result.getAddress();
+                 place = getLocationFromAddress(addresso);
+               mMap.addMarker(new MarkerOptions().position(place).title("Ugh"));
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place, 12.0f));
+            }
+
+        });
+
+        geo_autocomplete.addTextChangedListener(new TextWatcher() {
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() > 0)
+                {
+                    geo_autocomplete_clear.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    geo_autocomplete_clear.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        geo_autocomplete_clear.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                geo_autocomplete.setText("");
+            }
+        });
+
+
+
+
+
+
+
+
+        submit = (Button) findViewById(R.id.buttonSubmit);
+        submit.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+
+
+
+
+
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                String key = databaseReference.push().getKey();
-                databaseReference.child(key).child("place").push().setValue(addresso);
+              databaseReference.child("place").push().setValue(place);
             }
 
     });
