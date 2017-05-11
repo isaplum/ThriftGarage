@@ -18,12 +18,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button createBtn, browseBtn;
+    Button createBtn, browseBtn, logoutBtn;
     TextView tvmenu, tvoption;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -51,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         createBtn = (Button) findViewById(R.id.createButton);
         browseBtn = (Button) findViewById(R.id.browseButton);
-
+        logoutBtn  = (Button) findViewById(R.id.LogoutButton);
         setupButtonClickEvents();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -74,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
         browseBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent1 = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent1);
+
+            }
+        });
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onStop();
+                Intent intent1 = new Intent(getApplicationContext(), AuthActivity.class);
                 startActivity(intent1);
 
             }

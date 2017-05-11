@@ -175,7 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 /*
-*Pulls data from Firebase
+*Pulls data from Firebase and places markers on the map
  */
 
       DatabaseReference ref = FirebaseDatabase.getInstance().getReference();

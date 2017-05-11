@@ -49,8 +49,17 @@
         android:layout_marginRight="12dp"
         />
 
-
+    <TextView
+        android:text="Please Enter a Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/buttonSubmit"
+        android:layout_marginTop="27dp"
+        android:id="@+id/textnewt"
+        android:padding="10dp"/>
     <EditText
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress"

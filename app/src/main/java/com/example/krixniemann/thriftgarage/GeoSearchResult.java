@@ -13,7 +13,9 @@ public class GeoSearchResult {
     {
         this.address = address;
     }
-
+/*
+* Grabs the address
+ */
     public String getAddress(){
 
         String display_address = "";
@@ -24,7 +26,9 @@ public class GeoSearchResult {
         display_address = display_address.substring(0, display_address.length() - 2);
         return display_address;
     }
-
+    /*
+    * Converts address to string
+     */
     public String toString(){
         String display_address = "";
 

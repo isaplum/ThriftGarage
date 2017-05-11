@@ -200,6 +200,7 @@ public class CreateActivity extends FragmentActivity implements
     }
 /*
 * Converts address to LatLng
+* @param String strAddress
  */
     public LatLng getLocationFromAddress(String strAddress) {
         Geocoder coder = new Geocoder(this);

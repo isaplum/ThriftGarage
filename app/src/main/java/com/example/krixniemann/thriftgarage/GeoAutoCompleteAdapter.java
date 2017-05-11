@@ -24,12 +24,19 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
     public GeoAutoCompleteAdapter(Context context) {
         mContext = context;
     }
-
+    /*
+    * Gets the count of the result list
+    *
+     */
     @Override
     public int getCount() {
         return resultList.size();
     }
 
+    /*
+    * Gets the search item
+    * @param int index
+     */
     @Override
     public GeoSearchResult getItem(int index) {
         return (GeoSearchResult) resultList.get(index);
@@ -39,7 +46,10 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
     public long getItemId(int position) {
         return position;
     }
-
+    /*
+    * Returns the view
+    * @param int position, View convertView, ViewGroup parents
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -51,7 +61,10 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
         return convertView;
     }
-
+    /*
+    * Gets the filter
+    *
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
@@ -67,7 +80,10 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
                 }
                 return filterResults;
             }
-
+            /*
+            * Publishes the result
+            * @param CharSequence constraint, Filter.FilterResults results
+             */
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
                 if (results != null && results.count > 0) {
@@ -80,7 +96,10 @@ public class GeoAutoCompleteAdapter extends BaseAdapter implements Filterable {
         };
         return filter;
     }
-
+    /*
+    * Returns list of locations
+    * @param Context context, String query_text
+     */
     private List<GeoSearchResult> findLocations(Context context, String query_text) {
 
         List<GeoSearchResult> geo_search_results = new ArrayList<GeoSearchResult>();

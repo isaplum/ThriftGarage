@@ -33,7 +33,10 @@ public class AuthActivity extends AppCompatActivity {
     setupLoginButton();
     setupCreateButton();
 }
-
+    /*
+      * Sets up buttons
+      *
+       */
     private void setupLoginButton() {
         login = (Button) findViewById(R.id.loginButton);
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -49,6 +52,10 @@ public class AuthActivity extends AppCompatActivity {
 
 
     }
+    /*
+  * Sets up create Buttons
+  *
+   */
     private void setupCreateButton() {
         create = (Button) findViewById(R.id.createButton);
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -63,6 +70,10 @@ public class AuthActivity extends AppCompatActivity {
 
 
     }
+    /*
+  * Defines signIn functionality
+  * @param String email, String password
+   */
     private void signIn(String email, String password){
         //sign in the recurrent user with email and password previously created.
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() { //add to listener
@@ -77,6 +88,10 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+  * Creates Account
+  * @param String email, String password
+   */
     private void createAccount(String email, String password) {
         //create account for new users
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

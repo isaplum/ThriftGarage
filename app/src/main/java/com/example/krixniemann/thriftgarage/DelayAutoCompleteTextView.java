@@ -22,13 +22,20 @@ public class DelayAutoCompleteTextView extends AutoCompleteTextView {
     private int mAutoCompleteDelay = DEFAULT_AUTOCOMPLETE_DELAY;
     private ProgressBar mLoadingIndicator;
 
+    /*
+* Creates Handler object and retrieves the handler message
+* @param Message msg
+ */
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             DelayAutoCompleteTextView.super.performFiltering((CharSequence) msg.obj, msg.arg1);
         }
     };
-
+    /*
+    * Delays the AutoComplete Text View
+    * @param Context context, AttributeSet attrs
+     */
     public DelayAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -40,7 +47,10 @@ public class DelayAutoCompleteTextView extends AutoCompleteTextView {
     public void setAutoCompleteDelay(int autoCompleteDelay) {
         mAutoCompleteDelay = autoCompleteDelay;
     }
-
+    /*
+      * Filters message
+      * @param CharSequence text, int keyCodet
+       */
     @Override
     protected void performFiltering(CharSequence text, int keyCodet) {
         if (mLoadingIndicator != null) {
@@ -49,7 +59,10 @@ public class DelayAutoCompleteTextView extends AutoCompleteTextView {
         mHandler.removeMessages(MESSAGE_TEXT_CHANGED);
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MESSAGE_TEXT_CHANGED, text), mAutoCompleteDelay);
     }
-
+    /*
+      * Hides loading indicator upon Filter completion
+      * @param int count
+       */
     @Override
     public void onFilterComplete(int count) {
         if (mLoadingIndicator != null) {
