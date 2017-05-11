@@ -50,9 +50,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker mCurrLocationMarker;
     private GoogleMap mMap;
     List<Marker> markersList;
-   // public static LatLng addresso;
-    private Double latitude;
-    private Double longitude;
+   public static LatLng addresso;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +146,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -187,15 +186,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot data : dataSnapshot.child("place").getChildren()) {
-                        LatLng address = data.getValue(LatLng.class);
 
 
-                        mMap.addMarker(new MarkerOptions().position(address).title(""));
+                     String lat = data.child("latitude").getValue().toString();
+                        String lon = data.child("longitude").getValue().toString();
+                        double latitude = Double.parseDouble(lat);
+                        double longitude = Double.parseDouble(lon);
+
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(""));
+
+
                     }
-
-
-
-
 
                 } else {
                     Log.e(TAG, "onDataChange: No data");
