@@ -174,7 +174,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
 
-//This is what is probably needing to be fixed. fixme pls
+/*
+*Pulls data from Firebase
+ */
 
       DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -188,13 +190,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (DataSnapshot data : dataSnapshot.child("place").getChildren()) {
 
 
-                     String lat = data.child("latitude").getValue().toString();
-                        String lon = data.child("longitude").getValue().toString();
+                     String lat = data.child("position").child("latitude").getValue().toString();
+                        String lon = data.child("position").child("longitude").getValue().toString();
+                        String title = data.child("title").getValue().toString();
                         double latitude = Double.parseDouble(lat);
                         double longitude = Double.parseDouble(lon);
 
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(""));
-
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(title));
 
                     }
 

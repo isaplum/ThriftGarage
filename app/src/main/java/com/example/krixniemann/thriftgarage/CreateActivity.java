@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -60,7 +61,7 @@ public class CreateActivity extends FragmentActivity implements
         GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, OnConnectionFailedListener {
 
-    EditText etAddressy;
+    EditText etTitle;
     Button submit;
     private GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
@@ -68,13 +69,13 @@ public class CreateActivity extends FragmentActivity implements
     private DelayAutoCompleteTextView geo_autocomplete;
     private ImageView geo_autocomplete_clear;
     private LatLng place;
-
+    Marker marker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-        etAddressy = (EditText) findViewById(R.id.etAddress);
+        etTitle = (EditText) findViewById(R.id.etAddress);
         MapFragment mapFragment =
                 (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -95,7 +96,6 @@ public class CreateActivity extends FragmentActivity implements
         geo_autocomplete = (DelayAutoCompleteTextView) findViewById(R.id.geo_autocomplete);
         geo_autocomplete.setThreshold(THRESHOLD);
         geo_autocomplete.setAdapter(new GeoAutoCompleteAdapter(this)); // 'this' is Activity instance
-
         geo_autocomplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -108,8 +108,8 @@ public class CreateActivity extends FragmentActivity implements
                 geo_autocomplete.setText(result.getAddress());
                 String addresso = result.getAddress();
                 place = getLocationFromAddress(addresso);
-                mMap.addMarker(new MarkerOptions().position(place).title(""));
 
+               marker = mMap.addMarker(new MarkerOptions().position(place).title(""));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place, 12.0f));
             }
 
@@ -143,15 +143,24 @@ public class CreateActivity extends FragmentActivity implements
         });
 
 
-        // Pushes address coordinates to firebase
+        /*
+         *Pushes address coordinates to firebase
+          */
         submit = (Button) findViewById(R.id.buttonSubmit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
                 if (place != null) {
-
+                    String title = etTitle.getText().toString();
+                    marker = mMap.addMarker(new MarkerOptions().position(place).title("" +title + ""));
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.child("place").push().setValue(place);
+
+
+                        databaseReference.child("place").push().setValue(marker);
+
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
                 }else {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(CreateActivity.this);
                     builder1.setMessage("Invalid Location");
@@ -159,8 +168,9 @@ public class CreateActivity extends FragmentActivity implements
                 }
 
 
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.child("place").push().setValue(place);
+
+
+
             }
 
         });
@@ -188,7 +198,9 @@ public class CreateActivity extends FragmentActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-//Converts address to LatLng
+/*
+* Converts address to LatLng
+ */
     public LatLng getLocationFromAddress(String strAddress) {
         Geocoder coder = new Geocoder(this);
         List<android.location.Address> address;
